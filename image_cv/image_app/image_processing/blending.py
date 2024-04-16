@@ -21,6 +21,9 @@ def blend(img1: np.ndarray, img2: np.ndarray) -> np.ndarray:
     Notes:
     Both images should be in a compatible format (e.g., both 8-bit or floating point).
     """
+    
+    if img1.size == 0 or img2.size == 0:
+        raise ValueError("Input images must not be empty")
 
     height2, width2 = img2.shape[:2]
     

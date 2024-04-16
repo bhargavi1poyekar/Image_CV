@@ -161,3 +161,33 @@ def cv2_write(processed_filename: str, processed_image: np.ndarray) -> str:
         return processed_file_url
     except Exception as e:
         raise Exception(f"Failed to process and save image")  
+
+
+def create_test_image(width: int, height: int, color: tuple) -> np.ndarray:
+
+    """
+    Utility function to create a solid color image of specified dimensions and color.
+    
+    Parameters:
+    width (int): The width of the image.
+    height (int): The height of the image.
+    color (tuple): A tuple representing the BGR color (Blue, Green, Red) of the image.
+    
+    Returns:
+    np.ndarray: A NumPy array representing the image.
+    """
+    return np.full((height, width, 3), color, dtype=np.uint8)
+
+def create_test_grayscale_image(width: int, height: int, intensity: int) -> np.ndarray:
+    """
+    Utility function to create a solid grayscale image of specified dimensions and intensity.
+    
+    Parameters:
+    width (int): The width of the image.
+    height (int): The height of the image.
+    intensity (int): The grayscale intensity value for the image, from 0 (black) to 255 (white).
+    
+    Returns:
+    np.ndarray: A NumPy array representing the grayscale image, with one channel.
+    """
+    return np.full((height, width), intensity, dtype=np.uint8)

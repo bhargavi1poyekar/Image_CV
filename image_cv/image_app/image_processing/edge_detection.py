@@ -23,25 +23,25 @@ def detect_edges(img: np.ndarray) -> np.ndarray:
     image to grayscale before applying this function.
     """
 
-    # Sobel filter for gradients in x-direction
-    sobel_x = np.array([[1, 0, -1],
-                        [2, 0, -2],
-                        [1, 0, -1]])
-    
-    # Sobel filter for gradients in y_direction
-    sobel_y = np.array([[1, 2, 1],
-                        [0, 0, 0],
-                        [-1, -2, -1]])
-    
-    # Sobel filter for both horizontal and vertical edges
-    edge_vertical = cv2.filter2D(img, -1, sobel_x)
-    # Parameters=> (image, depth, kernel) => depth: -1 output image depth same as input image.
-    edge_horizontal = cv2.filter2D(img, -1, sobel_y)
-    
-    # Combine the results to detect edges in all directions
-    edge_output = cv2.addWeighted(edge_vertical, 0.5, edge_horizontal, 0.5, 0)
-    
-    return edge_output
+    if img.size == 0:
+        raise ValueError("Input image must not be empty")
+
+    if len(img.shape) == 3:
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+    # Apply Sobel filter to get the derivatives in the x direction
+    sobelx = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=3)
+
+    # Apply Sobel filter to get the derivatives in the y direction
+    sobely = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize=3)
+
+    # Calculate the magnitude of the gradients
+    magnitude = np.sqrt(sobelx**2 + sobely**2)
+
+    # Normalize to range 0 to 255
+    magnitude = np.uint8(255 * magnitude / np.max(magnitude))
+
+    return magnitude
 
 
 def blur_image(image: np.ndarray) -> np.ndarray:
