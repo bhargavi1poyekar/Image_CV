@@ -132,7 +132,7 @@ dmypy.json
 .pyre/
 
 # django media and static root
-/media/
+image_cv/media/
 
 # Ignore migrations
 **/migrations/*.py
