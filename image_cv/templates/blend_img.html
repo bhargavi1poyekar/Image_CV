@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Processing</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <!-- Alert for errors if any -->
+        {% if error_message %}
+        <div class="alert alert-danger" role="alert">
+            {{ error_message }}
+        </div>
+        {% endif %}
+        
+        <h1>Blend Images</h1>
+    
+
+        <!-- Image upload form -->
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <!-- Image 1 Input and Preview -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="imageFile1">Upload the first image:</label>
+                        <input type="file" class="form-control-file" id="imageFile1" name="imageFile1" required onchange="previewFile(1);">
+                        <img id="imagePreview1" alt="First Image Preview" class="img-fluid mt-2" style="max-width: 100%; height: auto; display: none;">
+                    </div>
+                </div>
+
+                <!-- Image 2 Input and Preview -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="imageFile2">Upload the second image:</label>
+                        <input type="file" class="form-control-file" id="imageFile2" name="imageFile2" required onchange="previewFile(2);">
+                        <img id="imagePreview2" alt="Second Image Preview" class="img-fluid mt-2" style="max-width: 100%; height: auto; display: none;">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            {% block button %}
+            <button type="submit" class="btn btn-primary">Blend</button>
+            {% endblock %}
+            
+        </form>
+
+        <div class="row">
+            <div class="col-md-4">
+                {% if original_image_url %}
+                    <h3>Original Image 1:</h3>
+                    <img src="{{ original_image_url }}" alt="Original Image 1" class="img-fluid">
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+                {% if original_image_url2 %}
+                    <h3>Original Image 2:</h3>
+                    <img src="{{ original_image_url2 }}" alt="Original Image 2" class="img-fluid">
+                {% endif %}
+            </div>
+            <div class="col-md-4">
+                {% if converted_image_url %}
+                    <h3>Hybrid Image:</h3>
+                    <img src="{{ converted_image_url }}" alt="Blended Image" class="img-fluid">
+                    <p>
+                        <a href="{{ converted_image_url }}" download class="btn btn-success my-3">Download Blended Image</a>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    </div>
+
+    <!-- Bootstrap and custom scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function previewFile(imageNumber) {
+            var preview = document.getElementById('imagePreview' + imageNumber);
+            var fileInput = document.getElementById('imageFile' + imageNumber);
+            var file = fileInput.files[0];
+            var reader = new FileReader();
+
+            reader.onloadend = function () {
+                if (file) {
+                    preview.src = reader.result;
+                    preview.style.display = 'block';
+                } else {
+                    preview.style.display = 'none';
+                }
+            };
+
+            if (file) {
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
